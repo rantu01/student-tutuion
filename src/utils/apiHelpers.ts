@@ -23,6 +23,7 @@ export function createPaginatedResponse<T>(
   return NextResponse.json(response);
 }
 
+
 export function createMessageResponse(message: string, status: number = 200): NextResponse {
   const response: ApiResponse<null> = {
     success: true,
