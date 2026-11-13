@@ -1,0 +1,131 @@
+================================================================================
+STUDENT DASHBOARD – COMPLETION REPORT
+================================================================================
+Date: 2026
+Project: sms-web (Student Management System)
+Scope: Audit, implement, and test the Student Dashboard and related flows.
+
+================================================================================
+1. MISSING PAGES DISCOVERED (Student Dashboard Sidebar)
+================================================================================
+Student sidebar items (case 'student') in src/components/dashboard/Sidebar.tsx:
+  - /dashboard/student (exists)
+  - /dashboard/student/courses (MISSING -> created)
+  - /dashboard/student/missions (MISSING -> created)
+  - /dashboard/student/assignments (MISSING -> created)
+  - /dashboard/student/progress (MISSING -> created)
+  - /dashboard/student/profile (exists)
+
+Only /dashboard/student and /dashboard/student/profile existed; the other 4 routes
+had no page.tsx and returned 404.
+
+================================================================================
+2. NEWLY CREATED PAGES
+================================================================================
+- src/app/dashboard/student/courses/page.tsx
+    Lists the logged-in student's enrolled courses via /api/students/courses.
+    Shows title, code, description, enrollment date. Empty state included.
+- src/app/dashboard/student/missions/page.tsx
+    Lists the student's missions via /api/mission-hub/student-missions.
+    Shows code, title, status, description, dates, student count, progress.
+    Empty state included.
+- src/app/dashboard/student/assignments/page.tsx
+    Lists assignments for the student's enrolled courses via new
+    /api/students/assignments endpoint. Shows title, course, due date, points,
+    and status (Completed / Overdue / Pending). Empty state included.
+- src/app/dashboard/student/progress/page.tsx
+    Aggregates courses, assignments (total/completed/overdue), missions, and
+    average mission progress. Shows completion-rate and mission-progress bars.
+
+================================================================================
+3. NEWLY CREATED API ROUTES
+================================================================================
+- src/app/api/students/assignments/route.ts (GET)
+    Returns published assignments for courses the student is enrolled in
+    (via StudentCourse -> CourseOffering). Marks each assignment completed
+    (by studentId/email in completedEmails) and overdue. Auth: student only.
+- src/app/api/auth/logout/route.ts (POST)
+    Clears the token cookie. Fixes 404s from DashboardHeader, MissionHubHeader,
+    and CommunicationHubHeader which called /api/auth/logout.
+- src/app/api/maintenance/backfill-student-profiles/route.ts (POST)
+    Creates StudentProfile records for student-role Users missing one.
+- src/app/api/maintenance/fix-long-usernames/route.ts (POST)
+    Shortens usernames longer than 30 characters.
+
+================================================================================
+4. PREVIOUSLY INCOMPLETE / BROKEN FEATURES FIXED
+================================================================================
+- Student dashboard quick-action buttons had no onClick handlers.
+  Wired them to /dashboard/student/assignments, /courses, /profile.
+- Student dashboard loadAssignments used /api/assignments?studentId=me which is
+  admin/manager/mentor-only (403 for students). Switched to /api/students/assignments.
+- /dashboard/admin/students showed 0 students because StudentProfile collection
+  was empty (demo seed created Users only). Fixed demo seed to also create
+  StudentProfile records. Backfilled 3 existing student users.
+- StudentProfile edit failed with "username too big" because backfilled usernames
+  were student_<mongoId> (>30 chars). Shortened them and added a defensive
+  truncation in the PUT handler. Also fixed backfill to generate short usernames.
+- Profile completion failed with E11000 duplicate key because backfilled
+  StudentProfile already existed. Changed to upsert (findOneAndUpdate).
+- Logout returned 404 (no /api/auth/logout). Created the endpoint.
+- JWT_SECRET missing from .env.local (only JWT_SECRET_KEY existed). Added
+  JWT_SECRET so middleware could load.
+- Build error: mission-communication-hub/resources/page.tsx missing "use client".
+  Added the directive.
+- MongoDB was not running locally; user connected Atlas. Updated MONGODB_URI usage
+  (sms-database). Env already had localhost; user switched to Atlas connection.
+
+================================================================================
+5. FRONTEND IMPLEMENTATION DETAILS
+================================================================================
+- All new pages use the existing Tailwind design (white cards, borders, rounded-lg).
+- Loading spinners, empty states, and error banners included.
+- Responsive grids (md:grid-cols-2, lg:grid-cols-4).
+- Status badges (Completed/Overdue/Pending, mission status).
+- Progress bars for completion rate and mission progress.
+
+================================================================================
+6. BACKEND / DATABASE INTEGRATION DETAILS
+================================================================================
+- Reused existing models: StudentCourse, CourseOffering, Assignment, MissionV2,
+  MissionStudentV2, StudentProfile, User.
+- No existing records deleted except via the existing clear-database flow.
+- New StudentProfile records created only for users missing them (backfill).
+- Demo-data seed now inserts StudentProfile for each demo student (insertMany,
+  ordered:false) with short usernames.
+- clear-database now also clears StudentProfile.
+
+================================================================================
+7. TESTING PERFORMED
+================================================================================
+- npm run build: SUCCESS (exit code 0). All routes compiled.
+- Manual API checks:
+    GET /api/student-profiles -> 3 profiles returned.
+    GET /api/students/courses -> OK shape.
+    GET /api/mission-hub/student-missions -> OK shape.
+    GET /api/students/assignments -> new endpoint, returns data.
+    POST /api/auth/logout -> 200.
+    POST /api/students/profile/complete -> upsert, no duplicate key.
+- Verified student login flow (rantumondal06@gmail.com) and profile completion.
+- Verified admin student edit page no longer throws username-too-big.
+
+================================================================================
+8. REMAINING ISSUES / NOTES
+================================================================================
+- Duplicate Mongoose index warnings on {"username":1} and {"code":1} (cosmetic;
+  caused by declaring index via both index:true and schema.index()). Not blocking.
+- Browserslist data is 15 months old (cosmetic warning).
+- Demo-data seed requires a mostly-empty DB (existing basic seed creates a batch).
+  Run "Clear Database" first, then seed.
+- AuthContext.logout already called /api/auth/clear-token; header buttons now
+  also have a working /api/auth/logout.
+
+================================================================================
+9. DEVELOPMENT SERVER STATUS
+================================================================================
+- Development server stopped. No node process listening on port 3000.
+- No unnecessary background dev processes remain.
+
+================================================================================
+END OF REPORT
+================================================================================

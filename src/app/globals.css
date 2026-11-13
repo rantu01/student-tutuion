@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Brand Colors */
+  --brand-primary: #007AFF;
+  --brand-secondary: #6B7280;
+
+  /* Typography Colors */
+  --text-body: #374151;
+  --text-strong: #111827;
+
+  /* Icon Tokens */
+  --icon-work: #2563EB;
+  --icon-work-bg: #EFF6FF;
+  --icon-edu: #7C3AED;
+  --icon-edu-bg: #F5F3FF;
+
+  /* Sizes */
+  --h1: 2.25rem; /* 36px */
+  --h2: 1.875rem; /* 30px */
+  --h3: 1.5rem; /* 24px */
+  --h4: 1.25rem; /* 20px */
+  --h5: 1.125rem; /* 18px */
+  --h6: 1rem; /* 16px */
+
+  /* Surfaces */
+  --surface-cream: #FFFDF7;
+}
+
+/* Typography System - Unified Font Sizes and Weights */
+@layer components {
+  /* Token-based text utilities */
+  .text-h1 { font-size: var(--h1); line-height: 1.2; font-weight: 700; color: var(--text-strong); }
+  .text-h2 { font-size: var(--h2); line-height: 1.25; font-weight: 700; color: var(--text-strong); }
+  .text-h3 { font-size: var(--h3); line-height: 1.3; font-weight: 600; color: var(--text-strong); }
+  .text-h4 { font-size: var(--h4); line-height: 1.35; font-weight: 600; color: var(--text-strong); }
+  .text-h5 { font-size: var(--h5); line-height: 1.4; font-weight: 600; color: var(--text-strong); }
+  .text-h6 { font-size: var(--h6); line-height: 1.45; font-weight: 600; color: var(--text-strong); }
+  .text-body { @apply text-sm text-gray-700; }
+  .text-body-lg { @apply text-base text-gray-700; }
+  .text-body-sm { @apply text-xs text-gray-600; }
+  .text-body-xs { @apply text-xs text-gray-500; }
+
+  /* Surface utility */
+  .bg-cream { background-color: var(--surface-cream); }
+
+  /* Headings - Reduced for professional appearance */
+  .heading-1 {
+    @apply text-2xl font-bold text-gray-900;
+  }
+  
+  .heading-2 {
+    @apply text-xl font-semibold text-gray-900;
+  }
+  
+  .heading-3 {
+    @apply text-lg font-semibold text-gray-900;
+  }
+  
+  .heading-4 {
+    @apply text-base font-medium text-gray-900;
+  }
+  
+  .heading-5 {
+    @apply text-sm font-medium text-gray-900;
+  }
+  
+  .heading-6 {
+    @apply text-xs font-medium text-gray-900;
+  }
+
+  /* Body Text - Reduced for professional appearance */
+  .body-large {
+    @apply text-base text-gray-700;
+  }
+  
+  .body-base {
+    @apply text-sm text-gray-700;
+  }
+  
+  .body-small {
+    @apply text-xs text-gray-600;
+  }
+  
+  .body-caption {
+    @apply text-xs text-gray-500;
+  }
+
+  /* UI Elements - Reduced for professional appearance */
+  .ui-button {
+    @apply text-xs font-medium;
+  }
+  
+  .ui-label {
+    @apply text-xs font-medium text-gray-700;
+  }
+  
+  .ui-input {
+    @apply text-sm text-gray-900;
+  }
+  
+  .ui-badge {
+    @apply text-xs font-medium;
+  }
+  
+  .ui-nav {
+    @apply text-xs font-medium;
+  }
+
+  /* Buttons */
+  .btn { @apply inline-flex items-center justify-center rounded-md font-medium transition-colors; }
+  .btn-primary { @apply btn bg-blue-600 text-white hover:bg-blue-700; }
+  .btn-secondary { @apply btn border border-gray-300 text-gray-900 hover:bg-gray-50; }
+  .btn-cta { @apply btn border border-black text-black hover:bg-black hover:text-white; }
+
+  /* Cards & Chips */
+  .card { @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6; }
+  .chip { @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs bg-gray-100 text-gray-700; }
+  .chip-muted { @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs bg-gray-50 text-gray-600 border border-gray-200; }
+
+  /* Special Cases - Reduced for professional appearance */
+  .hero-title {
+    @apply text-3xl md:text-4xl font-bold text-gray-900;
+  }
+  
+  .page-title {
+    @apply text-lg font-bold text-gray-900;
+  }
+  
+  .section-title {
+    @apply text-base font-semibold text-gray-900;
+  }
+  
+  .card-title {
+    @apply text-sm font-semibold text-gray-900;
+  }
+  
+  .modal-title {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  /* Compact Table System - Professional data tables */
+  .table-compact {
+    @apply w-full text-xs;
+  }
+  
+  .table-compact thead {
+    @apply bg-gray-50 border-b sticky top-0 z-10;
+  }
+  
+  .table-compact thead th {
+    @apply px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+    font-size: 10px;
+  }
+  
+  .table-compact tbody {
+    @apply divide-y divide-gray-200;
+  }
+  
+  .table-compact tbody tr {
+    @apply hover:bg-gray-50 transition-colors;
+  }
+  
+  .table-compact tbody td {
+    @apply px-3 py-2 whitespace-nowrap text-xs;
+    font-size: 11px;
+  }
+  
+  .table-compact tbody td.actions {
+    @apply text-right;
+  }
+  
+/* Compact Form Controls */
+.form-compact input,
+.form-compact select {
+  @apply px-3 py-2 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+.form-compact button {
+  @apply px-3 py-2 text-xs rounded-lg transition-colors;
+}
+
+.form-compact .filter-badge {
+  font-size: 10px;
+}
+
+.form-compact .clear-count {
+  font-size: 10px;
+}
+  
+  /* Table Container */
+  .table-container {
+    @apply border rounded-lg bg-white overflow-hidden;
+  }
+  
+  .table-responsive {
+    @apply overflow-x-auto;
+  }
+
+/* Global Modal Styles - Focus-friendly transparent backgrounds */
+  /* Replace black modal backgrounds with focus-friendly transparent ones */
+  .modal-backdrop {
+    @apply fixed inset-0 bg-gray-900/30 backdrop-blur-sm flex items-center justify-center z-50;
+  }
+  
+  /* Alternative: Very light gray with blur for better focus */
+  .modal-backdrop-focus {
+    @apply fixed inset-0 bg-white/80 backdrop-blur-md flex items-center justify-center z-50;
+  }
+  
+  /* For dark themes: subtle dark with blur */
+  .modal-backdrop-dark {
+    @apply fixed inset-0 bg-gray-800/40 backdrop-blur-sm flex items-center justify-center z-50;
+  }
+}
+
+/* Custom scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* Status dropdown positioning */
+.status-dropdown {
+  position: relative;
+}
+
+.status-dropdown > div[class*="absolute"] {
+  position: absolute !important;
+  z-index: 9999 !important;
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.375rem !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Ensure dropdown is always visible */
+.status-dropdown > div[class*="absolute"] {
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+
